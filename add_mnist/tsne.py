@@ -1,24 +1,19 @@
 import numpy as np
-import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 
 class Tsne:
-    def __init__(self, random=100, perplexity=30, figsize=(20, 16), dpi=300):
+    def __init__(self, random=100, perplexity=30):
        """
        Initialise Tsne visualisation class.
        
        Params:
            random: random seed for reproducibility
            perplexity: perplexity param for t-SNE
-           figsize: figure size for plots
-           dpi: dpi for saved figures
        """
        self.random = random
        self.perplexity = perplexity
-       self.figsize = figsize
-       self.dpi = dpi
        self.x_test = None
        self.y_test = None  
        self.digits_test = None
@@ -54,7 +49,7 @@ class Tsne:
     def visualise_tsne(self, tsne_results, title, path):
         """Basic t-SNE visualisation without labels."""
 
-        plt.figure(figsize=self.figsize, dpi=self.dpi)
+        plt.figure(figsize=(20, 16), dpi=300)
         
         scatter = plt.scatter(tsne_results[:, 0], tsne_results[:, 1],
                             c=self.y_test, cmap='tab20',
@@ -68,13 +63,13 @@ class Tsne:
         plt.ylabel('t-SNE dimension 2', fontsize=20)
         
         plt.tight_layout()
-        plt.savefig(path, dpi=self.dpi, bbox_inches='tight')
+        plt.savefig(path, dpi=300, bbox_inches='tight')
         plt.show()
        
     def with_labels(self, title, path):
         """t-SNE visualisation with annotations showing original label pairs."""
 
-        plt.figure(figsize=self.figsize, dpi=self.dpi)
+        plt.figure(figsize=(20, 16), dpi=300)
         
         scatter = plt.scatter(self.tsne_embed[:, 0], self.tsne_embed[:, 1], c=self.y_test, cmap='tab20', alpha=0.8, s=50)
                             
@@ -103,7 +98,7 @@ class Tsne:
                         fontsize=15)
         
         plt.tight_layout()
-        plt.savefig(path, dpi=self.dpi, bbox_inches='tight')
+        plt.savefig(path, dpi=300, bbox_inches='tight')
         plt.show()
        
     def perplexities(self, perplex_list, path):
@@ -130,6 +125,6 @@ class Tsne:
         cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])  
         fig.colorbar(scatter, cax=cbar_ax, label='Sum Value')
 
-        plt.savefig(path/'perplexities.png', dpi=self.dpi, bbox_inches='tight')
+        plt.savefig(path/'perplexities.png', dpi=300, bbox_inches='tight')
         plt.show()
 

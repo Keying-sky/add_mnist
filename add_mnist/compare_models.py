@@ -116,8 +116,8 @@ class CompareModels:
             'training_accuracy': float(rf_train_acc),
             'validation_accuracy': float(rf_val_acc),
             'test_accuracy': float(rf_test_acc),
-            'training_time': rf_time,
-        }
+            'training_time': rf_time}
+        
         
         # train and evaluate SVM
         svm_train_acc, svm_val_acc, svm_time = self.train_svm()
@@ -128,8 +128,8 @@ class CompareModels:
             'training_accuracy': float(svm_train_acc),
             'validation_accuracy': float(svm_val_acc),
             'test_accuracy': float(svm_test_acc),
-            'training_time': svm_time,
-        }
+            'training_time': svm_time}
+        
         
         # save results
         with open('comparison_result.json', 'w') as f:
@@ -138,10 +138,6 @@ class CompareModels:
     def plot_results(self):
         """Print and plot comparison of model performances."""
     
-        #if self.results is None:
-            #raise ValueError("Must run compare_models first")
-        
-        # print results
         print("\nResults:")
         for model, performs in self.results.items():
             print(f"\n{model}:")

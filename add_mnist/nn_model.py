@@ -7,9 +7,8 @@ import optuna
 import matplotlib.pyplot as plt
 
 class NNModel:
-    def __init__(self, input_shape=(28, 56), num_classes=19, path=None):
-        self.input_shape = input_shape
-        self.num_classes = num_classes
+    def __init__(self, num=19, path=None):
+        self.num = num
         self.path = path
         self.model = None
         self.history = None
@@ -41,7 +40,7 @@ class NNModel:
         
         # Create model
         model = Sequential()
-        model.add(Flatten(input_shape=self.input_shape))
+        model.add(Flatten(input_shape=(28, 56)))
         
         # Add hidden layers
         for _ in range(num_layers):
@@ -52,7 +51,7 @@ class NNModel:
                 model.add(Dropout(dropout_rate))
         
         # Add output layer
-        model.add(Dense(self.num_classes, activation='softmax'))
+        model.add(Dense(self.num, activation='softmax'))
         
         # Compile model
         model.compile(optimizer=Adam(learning_rate=learn_rate),loss='sparse_categorical_crossentropy',metrics=['accuracy'])
@@ -105,7 +104,6 @@ class NNModel:
         plt.ylabel('Validation Accuracy')
         plt.title('Optimisation')
         plt.grid(True)
-        # plt.savefig('optimisation.png')
         plt.show()
     
     def train_final_model(self):
@@ -115,21 +113,19 @@ class NNModel:
         Returns:
             Trained model and training history
         """
-        #if self.best_trial is None:
-          #  raise ValueError("Must run hyperparameter optimisation first")
-        
+
         model_path = self.path.MODEL_DIR / 'best_model.h5'
 
         x_train, y_train, x_validation, y_validation, x_test, y_test = self.load_data()
         
-        # Create model with best hyperparameters
+        # create model with best hyperparameters
         self.model = self.create_model(self.best_trial)
         
-        # Callbacks for final training
+        # callbacks for final training
         callbacks = [EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True),
                     ModelCheckpoint(str(model_path), monitor='val_accuracy', save_best_only=True)]
         
-        # Train final model
+        # train final model
         self.history = self.model.fit(
             x_train, y_train,
             batch_size=32,
@@ -138,7 +134,7 @@ class NNModel:
             callbacks=callbacks,
             verbose=1)
         
-        # Evaluate on test set
+        # evaluate on test set
         test_loss, test_accuracy = self.model.evaluate(x_test, y_test, verbose=0)
         print(f'\nTest accuracy: {test_accuracy:.4f}')
         print(f'\nTest loss: {test_loss:.4f}')
