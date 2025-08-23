@@ -2,7 +2,6 @@ add_mnist/__pycache__/
 add_mnist/*.egg-info
 *.egg-info
 
-*.pdf
-report/
+M1_Coursework.pdf
 
 data/
